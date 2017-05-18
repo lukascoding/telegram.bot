@@ -3,21 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>12.0.0</Version>
+    <Version>12.0.3-alpha</Version>
     <Product>Telegram Bot API</Product>
     <Description>Telegram Bot API Class Library</Description>
-    <Authors>Robin Müller</Authors>
+    <Authors>Lukas</Authors>
     <Copyright>Copyright © Robin Müller 2016</Copyright>
     <PackageIconUrl>https://telegram.org/file/811140058/2/7GzMJk4Ij54/a1649c56fa9f805828</PackageIconUrl>
     <PackageProjectUrl>https://github.com/MrRoundRobin/telegram.bot</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/MrRoundRobin/telegram.bot/master/LICENSE.txt</PackageLicenseUrl>
     <PackageReleaseNotes>Bot API 2.3.1 &amp; Changed how files are sent</PackageReleaseNotes>
-    <Company />
+    <Company>lukascoding</Company>
     <Product>Telegram Bot API</Product>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Telegram Api Bot</PackageTags>
     <RepositoryUrl>https://github.com/MrRoundRobin/telegram.bot.git</RepositoryUrl>
     <Version Condition="'$(APPVEYOR)' == 'True'">12.0.0-ci-$([System.DateTime]::Now.ToString("yyyyMMdd-HHmmss"))</Version>
+    <PackageId>lukascoding.Telegram.Bot</PackageId>
+    <AssemblyVersion>12.0.0.3</AssemblyVersion>
+    <FileVersion>12.0.0.3</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

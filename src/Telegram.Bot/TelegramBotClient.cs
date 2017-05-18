@@ -977,6 +977,23 @@ namespace Telegram.Bot
             return SendWebRequestAsync<bool>("answerCallbackQuery", parameters, cancellationToken);
         }
 
+        /// <summary>
+        /// Delete a message
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <param name="messageId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<bool> DeleteMessageAsync(long chatId, int messageId, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"chat_id", chatId},
+                {"message_id", messageId},
+            };
+            return SendWebRequestAsync<bool>("deleteMessage", parameters, cancellationToken);
+        }
+
         #endregion Available methods
 
         #region Updating messages
@@ -1436,7 +1453,7 @@ namespace Telegram.Bot
 
                 responseObject = JsonConvert.DeserializeObject<ApiResponse<T>>(responseString);
 
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException e) when (e.Message.Contains("401"))
             {

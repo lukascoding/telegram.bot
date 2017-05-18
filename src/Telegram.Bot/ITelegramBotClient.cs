@@ -544,7 +544,17 @@ namespace Telegram.Bot
             int cacheTime = 0,
             CancellationToken cancellationToken = default(CancellationToken));
 
-        #endregion Available methods
+        /// <summary>
+        /// Delete a message
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <param name="messageId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> DeleteMessageAsync(long chatId, int messageId,
+            CancellationToken cancellationToken = default(CancellationToken));
+
+            #endregion Available methods
 
         #region Updating messages
 
