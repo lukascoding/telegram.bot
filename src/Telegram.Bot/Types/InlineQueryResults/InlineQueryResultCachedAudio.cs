@@ -1,4 +1,5 @@
 using System.ComponentModel;
+
 using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults

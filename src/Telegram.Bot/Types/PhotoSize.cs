@@ -1,5 +1,5 @@
-﻿using lukascoding.TelegramBotApiClient.Converters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using lukascoding.TelegramBotApiClient.Converters;
 
 namespace lukascoding.TelegramBotApiClient.Types
 {

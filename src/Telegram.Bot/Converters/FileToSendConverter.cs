@@ -1,7 +1,7 @@
 using System;
+using Newtonsoft.Json;
 using lukascoding.TelegramBotApiClient.Types;
 using lukascoding.TelegramBotApiClient.Types.Enums;
-using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Converters
 {

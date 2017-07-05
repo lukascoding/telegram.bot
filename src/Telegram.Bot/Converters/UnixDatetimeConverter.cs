@@ -1,9 +1,10 @@
 using System;
-using lukascoding.TelegramBotApiClient.Helpers;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-#if !NET46
 
+#if !NET46
+using lukascoding.TelegramBotApiClient.Helpers;
 #endif
 
 namespace lukascoding.TelegramBotApiClient.Converters

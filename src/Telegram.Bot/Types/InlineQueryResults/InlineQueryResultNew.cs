@@ -5,7 +5,7 @@ namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
     /// <summary>
     /// Base class for uncached <see cref="InlineQueryResult"/>
     /// </summary>
-    /// <seealso cref="Telegram.Bot.Types.InlineQueryResults.InlineQueryResult" />
+    /// <seealso cref="lukascoding.TelegramBotApiClient.Types.InlineQueryResults.InlineQueryResult" />
     public class InlineQueryResultNew : InlineQueryResult
     {
         /// <summary>

@@ -1,5 +1,5 @@
-using System;
 using Newtonsoft.Json;
+using System;
 
 namespace lukascoding.TelegramBotApiClient.Types
 {
@@ -53,6 +53,15 @@ namespace lukascoding.TelegramBotApiClient.Types
         /// </remarks>
         [JsonProperty("callback_game", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public CallbackGame CallbackGame { get; set; }
+
+        /// <summary>
+        /// Optional. Specify True, to send a Pay button.
+        /// </summary>
+        /// <remarks>
+        /// Note: This type of button must always be the first button in the first row.
+        /// </remarks>
+        [JsonProperty("pay", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public bool Pay { get; set; }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="string"/> to <see cref="InlineKeyboardButton"/>.

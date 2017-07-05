@@ -1,6 +1,6 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using lukascoding.TelegramBotApiClient.Converters;
-using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {

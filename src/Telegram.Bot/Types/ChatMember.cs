@@ -1,5 +1,5 @@
-﻿using lukascoding.TelegramBotApiClient.Types.Enums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 
 namespace lukascoding.TelegramBotApiClient.Types
 {

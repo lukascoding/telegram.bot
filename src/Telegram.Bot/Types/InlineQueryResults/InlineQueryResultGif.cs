@@ -1,4 +1,5 @@
 using System.ComponentModel;
+
 using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
@@ -27,6 +28,12 @@ namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
         /// </summary>
         [JsonProperty("gif_height", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int Height { get; set; }
+
+        /// <summary>
+        /// Optional. Duration of the GIF
+        /// </summary>
+        [JsonProperty("gif_duration", Required = Required.Default)]
+        public int Duration { get; set; }
 
         /// <summary>
         /// Optional. Caption of the GIF file to be sent

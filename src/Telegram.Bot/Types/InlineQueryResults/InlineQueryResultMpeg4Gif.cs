@@ -1,4 +1,5 @@
 using System.ComponentModel;
+
 using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
@@ -27,6 +28,12 @@ namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
         /// </summary>
         [JsonProperty("mpeg4_height", Required = Required.Default, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int Height { get; set; }
+
+        /// <summary>
+        /// Optional. Duration of the Video
+        /// </summary>
+        [JsonProperty("mpeg4_duration", Required = Required.Default)]
+        public int Duration { get; set; }
 
         /// <summary>
         /// Optional. Caption of the MPEG-4 file to be sent

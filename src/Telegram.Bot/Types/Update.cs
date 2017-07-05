@@ -1,6 +1,7 @@
 ﻿using System;
-using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
+using lukascoding.TelegramBotApiClient.Types.Enums;
+using lukascoding.TelegramBotApiClient.Types.Payments;
 
 namespace lukascoding.TelegramBotApiClient.Types
 {
@@ -64,6 +65,18 @@ namespace lukascoding.TelegramBotApiClient.Types
         public Message EditedChannelPost { get; set; }
 
         /// <summary>
+        /// Optional. New incoming shipping query. Only for invoices with flexible price
+        /// </summary>
+        [JsonProperty("shipping_query")]
+        public ShippingQuery ShippingQuery { get; set; }
+
+        /// <summary>
+        /// Optional. New incoming pre-checkout query. Contains full information about checkout
+        /// </summary>
+        [JsonProperty("pre_checkout_query")]
+        public PreCheckoutQuery PreCheckoutQuery { get; set; }
+
+        /// <summary>
         /// Gets the update type.
         /// </summary>
         /// <value>
@@ -82,8 +95,10 @@ namespace lukascoding.TelegramBotApiClient.Types
                 if (EditedMessage != null)      return UpdateType.EditedMessage;
                 if (ChannelPost != null)        return UpdateType.ChannelPost;
                 if (EditedChannelPost != null)  return UpdateType.EditedChannelPost;
+                if (ShippingQuery != null)      return UpdateType.ShippingQueryUpdate;
+                if (PreCheckoutQuery != null)   return UpdateType.PreCheckoutQueryUpdate;
 
-                throw new ArgumentOutOfRangeException();
+                return UpdateType.UnknownUpdate;
             }
         }
 

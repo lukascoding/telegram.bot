@@ -1,6 +1,8 @@
 using System.ComponentModel;
-using lukascoding.TelegramBotApiClient.Types.InputMessageContents;
+
 using Newtonsoft.Json;
+
+using lukascoding.TelegramBotApiClient.Types.InputMessageContents;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {

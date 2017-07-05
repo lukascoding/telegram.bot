@@ -34,9 +34,9 @@ namespace lukascoding.TelegramBotApiClient.Types
         public string Username { get; set; }
 
         /// <summary>
-        /// Optional. User's or bot's languageCode
+        /// Optional. IETF language tag of the user's language
         /// </summary>
-        [JsonProperty(PropertyName = "language_code", Required = Required.Default)]
+        [JsonProperty("language_code")]
         public string LanguageCode { get; set; }
     }
 }

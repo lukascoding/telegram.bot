@@ -5,7 +5,7 @@ namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
     /// <summary>
     /// Defines how clients display a reply intreface to the user
     /// </summary>
-    /// <seealso cref="Telegram.Bot.Types.ReplyMarkups.IReplyMarkup" />
+    /// <seealso cref="lukascoding.TelegramBotApiClient.Types.ReplyMarkups.IReplyMarkup" />
     public abstract class ReplyMarkup : IReplyMarkup
     {
         /// <summary>

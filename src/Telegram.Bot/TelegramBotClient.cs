@@ -9,13 +9,17 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
 using lukascoding.TelegramBotApiClient.Args;
 using lukascoding.TelegramBotApiClient.Exceptions;
 using lukascoding.TelegramBotApiClient.Types;
 using lukascoding.TelegramBotApiClient.Types.Enums;
 using lukascoding.TelegramBotApiClient.Types.InlineQueryResults;
+using lukascoding.TelegramBotApiClient.Types.Payments;
 using lukascoding.TelegramBotApiClient.Types.ReplyMarkups;
-using Newtonsoft.Json;
+
 using File = lukascoding.TelegramBotApiClient.Types.File;
 
 namespace lukascoding.TelegramBotApiClient
@@ -23,7 +27,7 @@ namespace lukascoding.TelegramBotApiClient
     /// <summary>
     /// A client to use the Telegram Bot API
     /// </summary>
-    public partial class TelegramBotClient : ITelegramBotClient
+    public class TelegramBotClient : ITelegramBotClient
     {
         private const string BaseUrl = "https://api.telegram.org/bot";
         private const string BaseFileUrl = "https://api.telegram.org/file/bot";
@@ -352,7 +356,7 @@ namespace lukascoding.TelegramBotApiClient
             var parameters = new Dictionary<string, object>
             {
                 {"url", url},
-                {"mac_connections", maxConnections}
+                {"max_connections", maxConnections}
             };
 
             if (allowedUpdates != null && !allowedUpdates.Contains(UpdateType.All))
@@ -634,6 +638,36 @@ namespace lukascoding.TelegramBotApiClient
             return SendMessageAsync(MessageType.VoiceMessage, chatId, voice, disableNotification, replyToMessageId,
                 replyMarkup, additionalParameters, cancellationToken);
         }
+
+        /// <summary>
+        /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages.
+        /// </summary>
+        /// <param name="chatId"><see cref="ChatId"/> for the target chat</param>
+        /// <param name="videoNote">Video note to send.</param>
+        /// <param name="duration">Duration of sent video in seconds</param>
+        /// <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param>
+        /// <param name="replyToMessageId">If the message is a reply, ID of the original message</param>
+        /// <param name="replyMarkup">Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>On success, the sent <see cref="Message"/> is returned.</returns>
+        /// <see href="https://core.telegram.org/bots/api#sendvideonote"/>
+        public Task<Message> SendVideoNoteAsync(ChatId chatId, FileToSend videoNote,
+            int duration = 0,
+            bool disableNotification = false,
+            int replyToMessageId = 0,
+            IReplyMarkup replyMarkup = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var additionalParameters = new Dictionary<string, object>
+            {
+                {"duration", duration},
+            };
+
+            return SendMessageAsync(MessageType.VideoNoteMessage, chatId, videoNote, disableNotification, replyToMessageId,
+                replyMarkup, additionalParameters, cancellationToken);
+
+        }
+
 
         /// <summary>
         /// Use this method to send point on the map. On success, the sent Message is returned.
@@ -977,39 +1011,7 @@ namespace lukascoding.TelegramBotApiClient
 
             return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("answerCallbackQuery", parameters);
         }
-        /// <summary>
-        /// Delte a Message
-        /// </summary>
-        /// <param name="chatid"></param>
-        /// <param name="messageId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task<bool> DeleteMessageAsync(ChatId chatid, int messageId, CancellationToken cancellationToken = new CancellationToken())
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                {"chat_id", chatid.Identifier},
-                {"message_id", messageId}
-            };
-            return new WebApiClient(GetBaseUrl, cancellationToken).GetAsync<bool>("deleteMessage", parameters);
-        }
-
-        ///// <summary>
-        ///// Delete a message
-        ///// </summary>
-        ///// <param name="chatId"></param>
-        ///// <param name="messageId"></param>
-        ///// <param name="cancellationToken"></param>
-        ///// <returns></returns>
-        //public Task<bool> DeleteMessageAsync(ChatId chatId, int messageId, CancellationToken cancellationToken = new CancellationToken())
-        //{
-        //    var parameters = new Dictionary<string, object>
-        //    {
-        //        {"chat_id", chatId},
-        //        {"message_id", messageId},
-        //    };
-        //    return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("deleteMessage", parameters);
-        //}
+        
 
         #endregion Available methods
 
@@ -1183,6 +1185,25 @@ namespace lukascoding.TelegramBotApiClient
             return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageReplyMarkup", parameters);
         }
 
+        /// <summary>
+        /// Use this method to delete a message. A message can only be deleted if it was sent less than 48 hours ago. Any such recently sent outgoing message may be deleted. Additionally, if the bot is an administrator in a group chat, it can delete any message. If the bot is an administrator in a supergroup, it can delete messages from any other user and service messages about people joining or leaving the group (other types of service messages may only be removed by the group creator). In channels, bots can only remove their own messages.
+        /// </summary>
+        /// <param name="chatId"><see cref="ChatId"/> Unique identifier for the target chat or username of the target channel (in the format @channelusername)</param>
+        /// <param name="messageId">Unique identifier of the message to delete</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns><c>true</c> on success.</returns>
+        /// <see href="https://core.telegram.org/bots/api#deletemessage"/>
+        public Task<bool> DeleteMessageAsync(ChatId chatId, int messageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"chat_id", chatId},
+                {"message_id", messageId}
+            };
+
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("deleteMessage", parameters);
+        }
+
         #endregion Updating messages
 
         #region Inline mode
@@ -1230,6 +1251,140 @@ namespace lukascoding.TelegramBotApiClient
         }
 
         # endregion Inline mode
+
+        #region Payments
+
+        /// <summary>
+        /// Use this method to send invoices.
+        /// </summary>
+        /// <param name="chatId">Unique identifier for the target private chat</param>
+        /// <param name="title">Product name</param>
+        /// <param name="description">Product description</param>
+        /// <param name="payload">Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.</param>
+        /// <param name="providerToken">Payments provider token, obtained via Botfather</param>
+        /// <param name="startParameter">Unique deep-linking parameter that can be used to generate this invoice when used as a start parameter</param>
+        /// <param name="currency">Three-letter ISO 4217 currency code, see more on currencies</param>
+        /// <param name="prices">Price breakdown, a list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)</param>
+        /// <param name="photoUrl">URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service.</param>
+        /// <param name="photoSize">Photo size</param>
+        /// <param name="photoWidth">Photo width</param>
+        /// <param name="photoHeight">Photo height</param>
+        /// <param name="needName">Pass True, if you require the user's full name to complete the order</param>
+        /// <param name="needPhoneNumber">Pass True, if you require the user's phone number to complete the order</param>
+        /// <param name="needEmail">Pass True, if you require the user's email to complete the order</param>
+        /// <param name="needShippingAddress">Pass True, if you require the user's shipping address to complete the order</param>
+        /// <param name="isFlexible">Pass True, if the final price depends on the shipping method</param>
+        /// <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param>
+        /// <param name="replyToMessageId">If the message is a reply, ID of the original message</param>
+        /// <param name="replyMarkup">Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>On success, the sent <see cref="Message"/> is returned.</returns>
+        /// <see href="https://core.telegram.org/bots/api#sendinvoice"/>
+        public Task<Message> SendInvoiceAsync(ChatId chatId, string title, string description,
+            string payload, string providerToken, string startParameter, string currency,
+            LabeledPrice[] prices, string photoUrl = null, int photoSize = 0, int photoWidth = 0,
+            int photoHeight = 0, bool needName = false, bool needPhoneNumber = false,
+            bool needEmail = false, bool needShippingAddress = false, bool isFlexible = false,
+            bool disableNotification = false, int replyToMessageId = 0, InlineKeyboardMarkup replyMarkup = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"description", description},
+                {"payload", payload},
+                {"provider_token", providerToken},
+                {"start_parameter", startParameter},
+                {"currency", currency},
+                {"prices", prices},
+            };
+
+            if (photoUrl != null)
+                parameters.Add("photo_url", photoUrl);
+
+            if (photoSize != 0)
+                parameters.Add("photo_size", photoSize);
+
+            if (photoWidth != 0)
+                parameters.Add("photo_width", photoWidth);
+
+            if (photoHeight != 0)
+                parameters.Add("photo_height", photoHeight);
+
+            if (needName)
+                parameters.Add("need_name", true);
+
+            if (needPhoneNumber)
+                parameters.Add("need_phone_number", true);
+
+            if (needEmail)
+                parameters.Add("need_email", true);
+
+            if (needShippingAddress)
+                parameters.Add("need_shipping_address", true);
+
+            if (isFlexible)
+                parameters.Add("is_flexible", true);
+
+            return SendMessageAsync(MessageType.Invoice, chatId, title, disableNotification, replyToMessageId, replyMarkup, parameters, cancellationToken);
+        }
+
+        /// <summary>
+        /// If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries.
+        /// </summary>
+        /// <param name="shippingQueryId">Unique identifier for the query to be answered</param>
+        /// <param name="ok">Specify True if delivery to the specified address is possible and False if there are any problems</param>
+        /// <param name="shippingOptions">Required if ok is True.</param>
+        /// <param name="errorMessage">Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order </param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>On success, True is returned.</returns>
+        /// <see href="https://core.telegram.org/bots/api#answershippingquery"/>
+        public Task<bool> AnswerShippingQueryAsync(string shippingQueryId, bool ok,
+            ShippingOption[] shippingOptions = null,
+            string errorMessage = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"shipping_query_id", shippingQueryId},
+                {"ok", ok}
+            };
+
+            if (shippingOptions != null)
+                parameters.Add("shipping_options", shippingOptions);
+
+            if (!ok)
+                parameters.Add("error_message", errorMessage);
+
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("answerShippingQuery", parameters);
+        }
+
+        /// <summary>
+        /// Use this method to respond to such pre-checkout queries.
+        /// </summary>
+        /// <param name="preCheckoutQueryId">Unique identifier for the query to be answered</param>
+        /// <param name="ok">Specify True if everything is alright</param>
+        /// <param name="errorMessage">Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout</param>
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>On success, True is returned.</returns>
+        /// <remarks>Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.</remarks>
+        /// <see href="https://core.telegram.org/bots/api#answerprecheckoutquery"/>
+        public Task<bool> AnswerPreCheckoutQueryAsync(string preCheckoutQueryId, bool ok,
+            string errorMessage = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"pre_checkout_query_id", preCheckoutQueryId},
+                {"ok", ok}
+            };
+
+            if (!ok)
+                parameters.Add("error_message", errorMessage);
+
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("answerPreCheckoutQuery", parameters);
+        }
+
+        #endregion Payments
 
         #region Games
 
@@ -1368,18 +1523,18 @@ namespace lukascoding.TelegramBotApiClient
 
         #region Support Methods - Private
 
-        /// <summary>
-        /// Use this method to send any messages. On success, the sent Message is returned.
-        /// </summary>
-        /// <param name="type">The <see cref="MessageType"/></param>
-        /// <param name="chatId">Unique identifier for the target chat or username of the target channel (in the format @channelusername)</param>
-        /// <param name="content">The content of the message. Could be a text, photo, audio, sticker, document, video or location</param>
-        /// <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param>
-        /// <param name="replyToMessageId">Optional. If the message is a reply, ID of the original message</param>
-        /// <param name="replyMarkup">Optional. Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.</param>
-        /// <param name="additionalParameters">Optional. if additional Parameters could bei send i.e. "disable_web_page_preview" in for a TextMessage</param>
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>On success, the sent Message is returned.</returns>
+        /// <summary> 
+        /// Use this method to send any messages. On success, the sent Message is returned. 
+        /// </summary> 
+        /// <param name="type">The <see cref="MessageType"/></param> 
+        /// <param name="chatId">Unique identifier for the target chat or username of the target channel (in the format @channelusername)</param> 
+        /// <param name="content">The content of the message. Could be a text, photo, audio, sticker, document, video or location</param> 
+        /// <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param> 
+        /// <param name="replyToMessageId">Optional. If the message is a reply, ID of the original message</param> 
+        /// <param name="replyMarkup">Optional. Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to hide keyboard or to force a reply from the user.</param> 
+        /// <param name="additionalParameters">Optional. if additional Parameters could bei send i.e. "disable_web_page_preview" in for a TextMessage</param> 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param> 
+        /// <returns>On success, the sent Message is returned.</returns> 
         private Task<Message> SendMessageAsync(MessageType type, ChatId chatId, object content,
             bool disableNotification = false,
             int replyToMessageId = 0,
@@ -1408,93 +1563,6 @@ namespace lukascoding.TelegramBotApiClient
 
             return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>(typeInfo.Key, additionalParameters);
         }
-
-        //private async Task<T> SendWebRequestAsync<T>(string method, Dictionary<string, object> parameters = null,
-        //    CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    if (_invalidToken)
-        //        throw new ApiRequestException("Invalid token", 401);
-
-        //    var uri = new Uri(BaseUrl + _token + "/" + method);
-
-        //    ApiResponse<T> responseObject = null;
-        //    try
-        //    {
-        //        HttpResponseMessage response;
-
-        //        if (parameters == null || parameters.Count == 0)
-        //        {
-        //            // Request with no parameters
-
-        //            response = await _httpClient.GetAsync(uri, cancellationToken)
-        //                                    .ConfigureAwait(false);
-        //        }
-        //        else if (parameters.Any(p => p.Value is FileToSend && ((FileToSend)p.Value).Type == FileType.Stream))
-        //        {
-        //            // Request including a file
-
-        //            using (var form = new MultipartFormDataContent())
-        //            {
-        //                foreach (var parameter in parameters.Where(parameter => parameter.Value != null))
-        //                {
-        //                    var content = ConvertParameterValue(parameter.Value);
-
-        //                    if (parameter.Value is FileToSend)
-        //                    {
-        //                        form.Add(content, parameter.Key, ((FileToSend)parameter.Value).Filename);
-        //                    }
-        //                    else
-        //                    {
-        //                        form.Add(content, parameter.Key);
-        //                    }
-        //                }
-
-        //                response = await _httpClient.PostAsync(uri, form, cancellationToken)
-        //                                        .ConfigureAwait(false);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // Request with JSON data
-
-        //            var payload = JsonConvert.SerializeObject(parameters);
-
-        //            var httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
-
-        //            response = await _httpClient.PostAsync(uri, httpContent, cancellationToken)
-        //                                    .ConfigureAwait(false);
-        //        }
-
-        //        var responseString = await response.Content.ReadAsStringAsync()
-        //                                            .ConfigureAwait(false);
-
-        //        responseObject = JsonConvert.DeserializeObject<ApiResponse<T>>(responseString);
-
-        //        //response.EnsureSuccessStatusCode();
-        //    }
-        //    catch (HttpRequestException e) when (e.Message.Contains("401"))
-        //    {
-        //        _invalidToken = true;
-        //        throw new ApiRequestException("Invalid token", 401, e);
-        //    }
-        //    catch (TaskCanceledException e)
-        //    {
-        //        if (cancellationToken.IsCancellationRequested)
-        //            throw;
-
-        //        throw new ApiRequestException("Request timed out", 408, e);
-        //    }
-        //    catch (HttpRequestException e)
-        //        when (e.Message.Contains("400") || e.Message.Contains("403") || e.Message.Contains("409")) {}
-
-        //    if (responseObject == null)
-        //        responseObject = new ApiResponse<T> {Ok = false, Message = "No response received"};
-
-        //    if (!responseObject.Ok)
-        //        throw ApiRequestException.FromApiResponse(responseObject);
-
-        //    return responseObject.ResultObject;
-        //}
 
         private static HttpContent ConvertParameterValue(object value)
         {

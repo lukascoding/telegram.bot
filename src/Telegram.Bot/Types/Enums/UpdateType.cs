@@ -1,6 +1,6 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
 
 namespace lukascoding.TelegramBotApiClient.Types.Enums
 {
@@ -57,6 +57,18 @@ namespace lukascoding.TelegramBotApiClient.Types.Enums
         /// </summary>
         [EnumMember(Value = "edited_channel_post")]
         EditedChannelPost,
+
+        /// <summary>
+        /// The <see cref="Update"/> contains an <see cref="ShippingQueryUpdate"/>
+        /// </summary>
+        [EnumMember(Value = "shipping_query")]
+        ShippingQueryUpdate,
+
+        /// <summary>
+        /// The <see cref="Update"/> contains an <see cref="PreCheckoutQueryUpdate"/>
+        /// </summary>
+        [EnumMember(Value = "pre_checkout_query")]
+        PreCheckoutQueryUpdate,
 
         /// <summary>
         /// Receive all <see cref="Update"/> Types

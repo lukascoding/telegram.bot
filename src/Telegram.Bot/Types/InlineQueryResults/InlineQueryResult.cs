@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using lukascoding.TelegramBotApiClient.Converters;
 using lukascoding.TelegramBotApiClient.Types.InputMessageContents;
 using lukascoding.TelegramBotApiClient.Types.ReplyMarkups;
-using Newtonsoft.Json;
 
 namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
