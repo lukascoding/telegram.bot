@@ -1,4 +1,4 @@
-﻿namespace Telegram.Bot.Types.ReplyMarkups
+﻿namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
 {
     /// <summary>
     /// Objects implementing this Interface define how a <see cref="User"/> can reply to the sent <see cref="Message"/>

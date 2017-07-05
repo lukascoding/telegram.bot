@@ -1,10 +1,8 @@
 using System.ComponentModel;
-
+using lukascoding.TelegramBotApiClient.Types.InputMessageContents;
 using Newtonsoft.Json;
 
-using Telegram.Bot.Types.InputMessageContents;
-
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Represents a <see cref="Game"/>.

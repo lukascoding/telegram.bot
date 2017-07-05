@@ -1,6 +1,6 @@
 using System;
 
-namespace Telegram.Bot.Args
+namespace lukascoding.TelegramBotApiClient.Args
 {
     /// <summary>
     /// <see cref="EventArgs"/> containing a general <see cref="Exception"/>

@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents an animation file to be displayed in the message containing a <see cref="Game"/>.

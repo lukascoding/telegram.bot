@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// The Api Response

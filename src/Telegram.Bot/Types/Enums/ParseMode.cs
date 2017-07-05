@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using Telegram.Bot.Converters;
+﻿using System.Collections.Generic;
+using lukascoding.TelegramBotApiClient.Converters;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.Enums
+namespace lukascoding.TelegramBotApiClient.Types.Enums
 {
     /// <summary>
     /// Text parsing mode

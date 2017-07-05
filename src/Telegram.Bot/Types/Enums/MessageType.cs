@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Telegram.Bot.Types.Enums
+namespace lukascoding.TelegramBotApiClient.Types.Enums
 {
     /// <summary>
     /// The type of a <see cref="Message"/>

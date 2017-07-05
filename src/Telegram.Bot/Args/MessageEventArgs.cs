@@ -1,8 +1,8 @@
 using System;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
+using lukascoding.TelegramBotApiClient.Types;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 
-namespace Telegram.Bot.Args
+namespace lukascoding.TelegramBotApiClient.Args
 {
     /// <summary>
     /// <see cref="EventArgs"/> containing a <see cref="Types.Message"/>

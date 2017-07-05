@@ -2,14 +2,14 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Telegram.Bot.Args;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.ReplyMarkups;
-using File = Telegram.Bot.Types.File;
+using lukascoding.TelegramBotApiClient.Args;
+using lukascoding.TelegramBotApiClient.Types;
+using lukascoding.TelegramBotApiClient.Types.Enums;
+using lukascoding.TelegramBotApiClient.Types.InlineQueryResults;
+using lukascoding.TelegramBotApiClient.Types.ReplyMarkups;
+using File = lukascoding.TelegramBotApiClient.Types.File;
 
-namespace Telegram.Bot
+namespace lukascoding.TelegramBotApiClient
 {
     /// <summary>
     /// A client interface to use the Telegram Bot API
@@ -114,7 +114,7 @@ namespace Telegram.Bot
         /// The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten.
         /// </param>
         /// <param name="limit">
-        /// Limits the number of updates to be retrieved. Values between 1—100 are accepted.
+        /// Limits the number of updates to be retrieved. Values between 1ï¿½100 are accepted.
         /// </param>
         /// <param name="timeout">
         /// Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
@@ -153,7 +153,7 @@ namespace Telegram.Bot
         /// Upload your public key certificate so that the root certificate in use can be checked.
         /// See the <see href="https://core.telegram.org/bots/self-signed">self-signed guide</see> for details.
         /// </param>
-        /// <param name="maxConnections">Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot‘s server, and higher values to increase your bot’s throughput.</param>
+        /// <param name="maxConnections">Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your botï¿½s server, and higher values to increase your botï¿½s throughput.</param>
         /// <param name="allowedUpdates">
         /// List the <see cref="UpdateType"/> of updates you want your bot to receive. See <see cref="UpdateType"/> for a complete list of available update types. Specify an empty list to receive all updates regardless of type (default).
         /// If not specified, the previous setting will be used.
@@ -431,7 +431,7 @@ namespace Telegram.Bot
         /// </summary>
         /// <param name="userId">Unique identifier of the target user</param>
         /// <param name="offset">Sequential number of the first photo to be returned. By default, all photos are returned.</param>
-        /// <param name="limit">Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.</param>
+        /// <param name="limit">Limits the number of photos to be retrieved. Values between 1ï¿½100 are accepted. Defaults to 100.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Returns a <see cref="UserProfilePhotos"/> object</returns>
         /// <see href="https://core.telegram.org/bots/api#getuserprofilephotos"/>
@@ -527,7 +527,7 @@ namespace Telegram.Bot
         /// <param name="text">Text of the notification. If not specified, nothing will be shown to the user</param>
         /// <param name="showAlert">If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.</param>
         /// <param name="url">
-        /// URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game – note that this will only work if the query comes from a callback_game button.
+        /// URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game ï¿½ note that this will only work if the query comes from a callback_game button.
         /// Otherwise, you may use links like telegram.me/your_bot? start = XXXX that open your bot with a parameter.
         /// </param>
         /// <param name="cacheTime">The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14.</param>
@@ -543,17 +543,15 @@ namespace Telegram.Bot
             string url = null,
             int cacheTime = 0,
             CancellationToken cancellationToken = default(CancellationToken));
-
         /// <summary>
-        /// Delete a message
+        /// Delete a Message
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="chatid"></param>
         /// <param name="messageId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> DeleteMessageAsync(long chatId, int messageId,
-            CancellationToken cancellationToken = default(CancellationToken));
-
+        Task<bool> DeleteMessageAsync(ChatId chatid, int messageId, CancellationToken cancellationToken = default(CancellationToken));
+        
             #endregion Available methods
 
         #region Updating messages

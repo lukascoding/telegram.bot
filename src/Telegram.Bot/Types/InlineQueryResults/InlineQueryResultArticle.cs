@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Represents a link to an article or web page.

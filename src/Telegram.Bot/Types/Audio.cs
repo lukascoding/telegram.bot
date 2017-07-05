@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents an audio file to be treated as music by the Telegram clients.

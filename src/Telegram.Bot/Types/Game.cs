@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.

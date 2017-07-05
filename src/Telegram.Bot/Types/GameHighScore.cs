@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents one row of the high scores table for a game.

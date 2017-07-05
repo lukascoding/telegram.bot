@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.ReplyMarkups
+namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
 {
     /// <summary>
     /// Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard.

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
-using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Converters
+namespace lukascoding.TelegramBotApiClient.Converters
 {
     internal class ParseModeConverter : JsonConverter
     {

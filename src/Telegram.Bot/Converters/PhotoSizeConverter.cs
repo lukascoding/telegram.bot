@@ -1,9 +1,9 @@
 using System;
+using lukascoding.TelegramBotApiClient.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Telegram.Bot.Types;
 
-namespace Telegram.Bot.Converters
+namespace lukascoding.TelegramBotApiClient.Converters
 {
     internal class PhotoSizeConverter : JsonConverter
     {

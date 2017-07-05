@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
-using Telegram.Bot.Converters;
-using Telegram.Bot.Types.Enums;
+using lukascoding.TelegramBotApiClient.Converters;
+using lukascoding.TelegramBotApiClient.Types.Enums;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// Represents information for a file to be sent

@@ -1,7 +1,7 @@
 ﻿using System;
-using Telegram.Bot.Types;
+using lukascoding.TelegramBotApiClient.Types;
 
-namespace Telegram.Bot.Args
+namespace lukascoding.TelegramBotApiClient.Args
 {
     /// <summary>
     /// <see cref="EventArgs"/> containing an <see cref="Types.Update"/>

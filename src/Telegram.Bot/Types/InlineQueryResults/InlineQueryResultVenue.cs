@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use <see cref="InlineQueryResult.InputMessageContent"/> to send a message with the specified content instead of the venue.

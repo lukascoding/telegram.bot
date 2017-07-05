@@ -1,9 +1,9 @@
 using System;
+using lukascoding.TelegramBotApiClient.Types;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Converters
+namespace lukascoding.TelegramBotApiClient.Converters
 {
     internal class FileToSendConverter : JsonConverter
     {

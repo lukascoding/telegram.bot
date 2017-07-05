@@ -1,8 +1,7 @@
 using System.ComponentModel;
-
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound).

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.ReplyMarkups
+namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
 {
     /// <summary>
     /// Defines how clients display a reply intreface to the user

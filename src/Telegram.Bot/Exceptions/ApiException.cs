@@ -1,8 +1,7 @@
 ﻿using System;
+using lukascoding.TelegramBotApiClient.Types;
 
-using Telegram.Bot.Types;
-
-namespace Telegram.Bot.Exceptions
+namespace lukascoding.TelegramBotApiClient.Exceptions
 {
     /// <summary>
     /// Represents an api error

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Telegram.Bot.Types.Enums;
+﻿using lukascoding.TelegramBotApiClient.Types.Enums;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.

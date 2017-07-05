@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.ReplyMarkups
+namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
 {
     /// <summary>
     /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).

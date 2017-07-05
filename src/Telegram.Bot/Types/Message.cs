@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using lukascoding.TelegramBotApiClient.Converters;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
-using Telegram.Bot.Converters;
-using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents a message.

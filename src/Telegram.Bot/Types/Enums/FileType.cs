@@ -1,4 +1,4 @@
-﻿namespace Telegram.Bot.Types.Enums
+﻿namespace lukascoding.TelegramBotApiClient.Types.Enums
 {
     /// <summary>
     /// Type of a <see cref="FileToSend"/>

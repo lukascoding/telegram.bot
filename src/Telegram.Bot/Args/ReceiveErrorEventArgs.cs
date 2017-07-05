@@ -1,7 +1,7 @@
 ﻿using System;
-using Telegram.Bot.Exceptions;
+using lukascoding.TelegramBotApiClient.Exceptions;
 
-namespace Telegram.Bot.Args
+namespace lukascoding.TelegramBotApiClient.Args
 {
     /// <summary>
     /// <see cref="EventArgs"/> containing an <see cref="Exceptions.ApiRequestException"/>

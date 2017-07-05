@@ -1,13 +1,12 @@
 using System;
-
+using lukascoding.TelegramBotApiClient.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-
 #if !NET46
-using Telegram.Bot.Helpers;
+
 #endif
 
-namespace Telegram.Bot.Converters
+namespace lukascoding.TelegramBotApiClient.Converters
 {
     internal class UnixDateTimeConverter : DateTimeConverterBase
     {

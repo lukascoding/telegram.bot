@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.InputMessageContents
+namespace lukascoding.TelegramBotApiClient.Types.InputMessageContents
 {
     /// <summary>
     /// Represents the content of a <see cref="Venue"/> message to be sent as the result of an <see cref="InlineQuery"/>.

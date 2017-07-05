@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Telegram.Bot.Converters;
+﻿using lukascoding.TelegramBotApiClient.Converters;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents one size of a photo or a file / sticker thumbnail.

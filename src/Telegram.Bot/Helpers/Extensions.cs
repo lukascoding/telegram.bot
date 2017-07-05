@@ -1,7 +1,7 @@
 #if !NET46
 using System;
 
-namespace Telegram.Bot.Helpers
+namespace lukascoding.TelegramBotApiClient.Helpers
 {
     /// <summary>
     /// Extension Methods

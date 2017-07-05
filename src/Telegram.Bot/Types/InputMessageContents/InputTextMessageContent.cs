@@ -1,7 +1,7 @@
+using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
-using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Types.InputMessageContents
+namespace lukascoding.TelegramBotApiClient.Types.InputMessageContents
 {
     /// <summary>
     /// Represents the content of a text message to be sent as the result of an <see cref="InlineQuery"/>.

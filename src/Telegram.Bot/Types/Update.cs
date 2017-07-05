@@ -1,8 +1,8 @@
 ﻿using System;
+using lukascoding.TelegramBotApiClient.Types.Enums;
 using Newtonsoft.Json;
-using Telegram.Bot.Types.Enums;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents an incoming update.

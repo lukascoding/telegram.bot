@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
+using lukascoding.TelegramBotApiClient.Types.InputMessageContents;
+using lukascoding.TelegramBotApiClient.Types.ReplyMarkups;
 using Newtonsoft.Json;
-using Telegram.Bot.Converters;
-using Telegram.Bot.Types.InputMessageContents;
-using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Base Class for inline results send in response to an <see cref="InlineQuery"/>

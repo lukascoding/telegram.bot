@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Telegram.Bot.Converters;
+﻿using lukascoding.TelegramBotApiClient.Converters;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// Represents a ChatId
@@ -9,8 +9,14 @@ namespace Telegram.Bot.Types
     [JsonConverter(typeof(ChatIdConverter))]
     public class ChatId
     {
-        internal long Identifier;
-        internal string Username;
+        /// <summary>
+        /// id
+        /// </summary>
+        public long Identifier;
+        /// <summary>
+        /// username
+        /// </summary>
+        public string Username;
 
         public ChatId(long identifier)
         {
@@ -34,7 +40,7 @@ namespace Telegram.Bot.Types
         public override int GetHashCode() => ((string)this).GetHashCode();
 
         public override string ToString() => this;
-
+        
         public static implicit operator ChatId(long identifier) => new ChatId(identifier);
 
         public static implicit operator ChatId(string username) => new ChatId(username);

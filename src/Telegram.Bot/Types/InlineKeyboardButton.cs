@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.

@@ -4,25 +4,21 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-
+using lukascoding.TelegramBotApiClient.Args;
+using lukascoding.TelegramBotApiClient.Exceptions;
+using lukascoding.TelegramBotApiClient.Types;
+using lukascoding.TelegramBotApiClient.Types.Enums;
+using lukascoding.TelegramBotApiClient.Types.InlineQueryResults;
+using lukascoding.TelegramBotApiClient.Types.ReplyMarkups;
 using Newtonsoft.Json;
+using File = lukascoding.TelegramBotApiClient.Types.File;
 
-using Telegram.Bot.Args;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.ReplyMarkups;
-
-using File = Telegram.Bot.Types.File;
-
-namespace Telegram.Bot
+namespace lukascoding.TelegramBotApiClient
 {
     /// <summary>
     /// A client to use the Telegram Bot API
@@ -31,9 +27,16 @@ namespace Telegram.Bot
     {
         private const string BaseUrl = "https://api.telegram.org/bot";
         private const string BaseFileUrl = "https://api.telegram.org/file/bot";
+        private const string BetaBaseUrl = "https://api.telegram.org/beta/bot";
+        private const string BasePwrBotUrl = "https://api.pwrtelegram.xyz/bot";
+        private const string BasePwrDeepBotUrl = "https://deepapi.pwrtelegram.xyz/bot";
+        private string GetBaseUrl => $"{BaseUrl}{_token}/";
+        private string GetBetaBaseUrl => $"{BetaBaseUrl}{_token}/";
+        private string GetBaseFileUrl => $"{BaseFileUrl}{_token}/";
+        private string GetBasePwrBotUrl => $"{BasePwrBotUrl}{_token}/";
+        private string GetBasePwrDeepBotUrl => $"{BasePwrDeepBotUrl}{_token}/";
 
-        private readonly string _token;
-        private bool _invalidToken;
+        private static string _token;
         private readonly HttpClient _httpClient;
 
         #region Config Properties
@@ -43,8 +46,8 @@ namespace Telegram.Bot
         /// </summary>
         public TimeSpan Timeout
         {
-            get { return _httpClient.Timeout; }
-            set { _httpClient.Timeout = value; }
+            get => _httpClient.Timeout;
+            set => _httpClient.Timeout = value;
         }
 
         /// <summary>
@@ -203,9 +206,6 @@ namespace Telegram.Bot
         /// <exception cref="ApiRequestException"> Thrown if token is invalid</exception>
         public void StartReceiving(UpdateType[] allowedUpdates = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (_invalidToken)
-                throw new ApiRequestException("Invalid token", 401);
-
             _receivingCancellationTokenSource = new CancellationTokenSource();
 
             cancellationToken.Register(() => _receivingCancellationTokenSource.Cancel());
@@ -308,7 +308,8 @@ namespace Telegram.Bot
             if (allowedUpdates != null && !allowedUpdates.Contains(UpdateType.All))
                 parameters.Add("allowed_updates", allowedUpdates);
 
-            return SendWebRequestAsync<Update[]>("getUpdates", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken)
+                .PostAsync<Update[]>("getUpdates", parameters);
         }
 
         /// <summary>
@@ -360,7 +361,8 @@ namespace Telegram.Bot
             if (certificate != null)
                 parameters.Add("certificate", certificate);
 
-            return SendWebRequestAsync<bool>("setWebhook", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken)
+                .PostAsync<bool>("setWebhook", parameters);
         }
 
         /// <summary>
@@ -370,7 +372,7 @@ namespace Telegram.Bot
         /// <returns>Returns true on success</returns>
         /// <see href="https://core.telegram.org/bots/api#deletewebhook"/>
         public Task<bool> DeleteWebhookAsync(CancellationToken cancellationToken = default(CancellationToken))
-            => SendWebRequestAsync<bool>("deleteWebhook", null, cancellationToken);
+            => new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("deleteWebhook", null);
 
         /// <summary>
         /// Use this method to get current webhook status.
@@ -379,7 +381,7 @@ namespace Telegram.Bot
         /// <returns>On success, returns <see cref="WebhookInfo"/>.</returns>
         /// <see href="https://core.telegram.org/bots/api#getwebhookinfo"/>
         public Task<WebhookInfo> GetWebhookInfoAsync(CancellationToken cancellationToken = default(CancellationToken))
-            => SendWebRequestAsync<WebhookInfo>("getWebhookInfo", null, cancellationToken);
+            => new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<WebhookInfo>("getWebhookInfo", null);
 
         #endregion Getting updates
 
@@ -392,7 +394,7 @@ namespace Telegram.Bot
         /// <returns>Returns basic information about the bot in form of <see cref="User"/> object</returns>
         /// <see href="https://core.telegram.org/bots/api#getme"/>
         public Task<User> GetMeAsync(CancellationToken cancellationToken = default(CancellationToken))
-            => SendWebRequestAsync<User>("getMe", cancellationToken: cancellationToken);
+            => new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<User>("getMe", null);
 
         /// <summary>
         /// Use this method to send text messages. On success, the sent Message is returned.
@@ -451,7 +453,7 @@ namespace Telegram.Bot
             if (disableNotification)
                 parameters.Add("disable_notification", true);
 
-            return SendWebRequestAsync<Message>("forwardMessage", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("forwardMessage", parameters);
         }
 
         /// <summary>
@@ -745,7 +747,7 @@ namespace Telegram.Bot
                 {"action", chatAction.ToActionString()}
             };
 
-            return SendWebRequestAsync<bool>("sendChatAction", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("sendChatAction", parameters);
         }
 
         /// <summary>
@@ -767,7 +769,7 @@ namespace Telegram.Bot
                 {"limit", limit}
             };
 
-            return SendWebRequestAsync<UserProfilePhotos>("getUserProfilePhotos", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<UserProfilePhotos>("getUserProfilePhotos", parameters);
         }
 
         /// <summary>
@@ -786,8 +788,7 @@ namespace Telegram.Bot
                 {"file_id", fileId}
             };
 
-            var fileInfo = await SendWebRequestAsync<File>("getFile", parameters, cancellationToken)
-                          .ConfigureAwait(false);
+            var fileInfo = await new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<File>("getFile", parameters).ConfigureAwait(false);
 
             var fileUri = new Uri(BaseFileUrl + _token + "/" + fileInfo.FilePath);
 
@@ -822,7 +823,7 @@ namespace Telegram.Bot
                 {"user_id", userId}
             };
 
-            return SendWebRequestAsync<bool>("kickChatMember", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("kickChatMember", parameters);
         }
 
         /// <summary>
@@ -839,7 +840,7 @@ namespace Telegram.Bot
                 {"chat_id", chatId}
             };
 
-            return SendWebRequestAsync<bool>("leaveChat", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("leaveChat", parameters);
         }
 
         /// <summary>
@@ -859,7 +860,7 @@ namespace Telegram.Bot
                 {"user_id", userId}
             };
 
-            return SendWebRequestAsync<bool>("unbanChatMember", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("unbanChatMember", parameters);
         }
 
         /// <summary>
@@ -876,7 +877,7 @@ namespace Telegram.Bot
                 {"chat_id", chatId}
             };
 
-            return SendWebRequestAsync<Chat>("getChat", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Chat>("getChat", parameters);
         }
 
         /// <summary>
@@ -894,7 +895,7 @@ namespace Telegram.Bot
                 {"chat_id", chatId}
             };
 
-            return SendWebRequestAsync<ChatMember[]>("getChatAdministrators", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<ChatMember[]>("getChatAdministrators", parameters);
         }
 
         /// <summary>
@@ -912,7 +913,7 @@ namespace Telegram.Bot
                 {"chat_id", chatId}
             };
 
-            return SendWebRequestAsync<int>("getChatMembersCount", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<int>("getChatMembersCount", parameters);
         }
 
         /// <summary>
@@ -932,7 +933,7 @@ namespace Telegram.Bot
                 {"user_id", userId}
             };
 
-            return SendWebRequestAsync<ChatMember>("getChatMember", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<ChatMember>("getChatMember", parameters);
         }
 
         /// <summary>
@@ -974,25 +975,41 @@ namespace Telegram.Bot
             if (cacheTime != 0)
                 parameters.Add("cache_time", cacheTime);
 
-            return SendWebRequestAsync<bool>("answerCallbackQuery", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("answerCallbackQuery", parameters);
         }
-
         /// <summary>
-        /// Delete a message
+        /// Delte a Message
         /// </summary>
-        /// <param name="chatId"></param>
+        /// <param name="chatid"></param>
         /// <param name="messageId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<bool> DeleteMessageAsync(long chatId, int messageId, CancellationToken cancellationToken = new CancellationToken())
+        public Task<bool> DeleteMessageAsync(ChatId chatid, int messageId, CancellationToken cancellationToken = new CancellationToken())
         {
             var parameters = new Dictionary<string, object>
             {
-                {"chat_id", chatId},
-                {"message_id", messageId},
+                {"chat_id", chatid.Identifier},
+                {"message_id", messageId}
             };
-            return SendWebRequestAsync<bool>("deleteMessage", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).GetAsync<bool>("deleteMessage", parameters);
         }
+
+        ///// <summary>
+        ///// Delete a message
+        ///// </summary>
+        ///// <param name="chatId"></param>
+        ///// <param name="messageId"></param>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //public Task<bool> DeleteMessageAsync(ChatId chatId, int messageId, CancellationToken cancellationToken = new CancellationToken())
+        //{
+        //    var parameters = new Dictionary<string, object>
+        //    {
+        //        {"chat_id", chatId},
+        //        {"message_id", messageId},
+        //    };
+        //    return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("deleteMessage", parameters);
+        //}
 
         #endregion Available methods
 
@@ -1030,7 +1047,7 @@ namespace Telegram.Bot
             if (parseMode != ParseMode.Default)
                 parameters.Add("parse_mode", parseMode.ToModeString());
 
-            return SendWebRequestAsync<Message>("editMessageText", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageText", parameters);
         }
 
         /// <summary>
@@ -1063,7 +1080,7 @@ namespace Telegram.Bot
             if (parseMode != ParseMode.Default)
                 parameters.Add("parse_mode", parseMode.ToModeString());
 
-            return SendWebRequestAsync<Message>("editMessageText", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageText", parameters);
         }
 
         /// <summary>
@@ -1090,7 +1107,7 @@ namespace Telegram.Bot
             if (replyMarkup != null)
                 parameters.Add("reply_markup", replyMarkup);
 
-            return SendWebRequestAsync<Message>("editMessageCaption", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageCaption", parameters);
         }
 
         /// <summary>
@@ -1115,7 +1132,7 @@ namespace Telegram.Bot
             if (replyMarkup != null)
                 parameters.Add("reply_markup", replyMarkup);
 
-            return SendWebRequestAsync<Message>("editMessageCaption", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageCaption", parameters);
         }
 
         /// <summary>
@@ -1140,7 +1157,7 @@ namespace Telegram.Bot
             if (replyMarkup != null)
                 parameters.Add("reply_markup", replyMarkup);
 
-            return SendWebRequestAsync<Message>("editMessageReplyMarkup", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageReplyMarkup", parameters);
         }
 
         /// <summary>
@@ -1163,7 +1180,7 @@ namespace Telegram.Bot
             if (replyMarkup != null)
                 parameters.Add("reply_markup", replyMarkup);
 
-            return SendWebRequestAsync<Message>("editMessageReplyMarkup", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("editMessageReplyMarkup", parameters);
         }
 
         #endregion Updating messages
@@ -1209,7 +1226,7 @@ namespace Telegram.Bot
             if (!string.IsNullOrWhiteSpace(switchPmParameter))
                 parameters.Add("switch_pm_parameter", switchPmParameter);
 
-            return SendWebRequestAsync<bool>("answerInlineQuery", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<bool>("answerInlineQuery", parameters);
         }
 
         # endregion Inline mode
@@ -1264,7 +1281,7 @@ namespace Telegram.Bot
                 {"edit_message", editMessage}
             };
 
-            return SendWebRequestAsync<Message>("setGameScore", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("setGameScore", parameters);
         }
 
         /// <summary>
@@ -1295,7 +1312,7 @@ namespace Telegram.Bot
                 {"edit_message", editMessage}
             };
 
-            return SendWebRequestAsync<Message>("setGameScore", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>("setGameScore", parameters);
         }
 
         /// <summary>
@@ -1321,7 +1338,7 @@ namespace Telegram.Bot
                 {"message_id", messageId}
             };
 
-            return SendWebRequestAsync<GameHighScore[]>("getGameHighScores", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<GameHighScore[]>("getGameHighScores", parameters);
         }
 
         /// <summary>
@@ -1344,7 +1361,7 @@ namespace Telegram.Bot
                 {"inline_message_id", inlineMessageId}
             };
 
-            return SendWebRequestAsync<GameHighScore[]>("getGameHighScores", parameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<GameHighScore[]>("getGameHighScores", parameters);
         }
 
         #endregion Games
@@ -1389,95 +1406,95 @@ namespace Telegram.Bot
             if (!string.IsNullOrEmpty(typeInfo.Value))
                 additionalParameters.Add(typeInfo.Value, content);
 
-            return SendWebRequestAsync<Message>(typeInfo.Key, additionalParameters, cancellationToken);
+            return new WebApiClient(GetBaseUrl, cancellationToken).PostAsync<Message>(typeInfo.Key, additionalParameters);
         }
 
-        private async Task<T> SendWebRequestAsync<T>(string method, Dictionary<string, object> parameters = null,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (_invalidToken)
-                throw new ApiRequestException("Invalid token", 401);
+        //private async Task<T> SendWebRequestAsync<T>(string method, Dictionary<string, object> parameters = null,
+        //    CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    if (_invalidToken)
+        //        throw new ApiRequestException("Invalid token", 401);
 
-            var uri = new Uri(BaseUrl + _token + "/" + method);
+        //    var uri = new Uri(BaseUrl + _token + "/" + method);
 
-            ApiResponse<T> responseObject = null;
-            try
-            {
-                HttpResponseMessage response;
+        //    ApiResponse<T> responseObject = null;
+        //    try
+        //    {
+        //        HttpResponseMessage response;
 
-                if (parameters == null || parameters.Count == 0)
-                {
-                    // Request with no parameters
+        //        if (parameters == null || parameters.Count == 0)
+        //        {
+        //            // Request with no parameters
 
-                    response = await _httpClient.GetAsync(uri, cancellationToken)
-                                            .ConfigureAwait(false);
-                }
-                else if (parameters.Any(p => p.Value is FileToSend && ((FileToSend)p.Value).Type == FileType.Stream))
-                {
-                    // Request including a file
+        //            response = await _httpClient.GetAsync(uri, cancellationToken)
+        //                                    .ConfigureAwait(false);
+        //        }
+        //        else if (parameters.Any(p => p.Value is FileToSend && ((FileToSend)p.Value).Type == FileType.Stream))
+        //        {
+        //            // Request including a file
 
-                    using (var form = new MultipartFormDataContent())
-                    {
-                        foreach (var parameter in parameters.Where(parameter => parameter.Value != null))
-                        {
-                            var content = ConvertParameterValue(parameter.Value);
+        //            using (var form = new MultipartFormDataContent())
+        //            {
+        //                foreach (var parameter in parameters.Where(parameter => parameter.Value != null))
+        //                {
+        //                    var content = ConvertParameterValue(parameter.Value);
 
-                            if (parameter.Value is FileToSend)
-                            {
-                                form.Add(content, parameter.Key, ((FileToSend)parameter.Value).Filename);
-                            }
-                            else
-                            {
-                                form.Add(content, parameter.Key);
-                            }
-                        }
+        //                    if (parameter.Value is FileToSend)
+        //                    {
+        //                        form.Add(content, parameter.Key, ((FileToSend)parameter.Value).Filename);
+        //                    }
+        //                    else
+        //                    {
+        //                        form.Add(content, parameter.Key);
+        //                    }
+        //                }
 
-                        response = await _httpClient.PostAsync(uri, form, cancellationToken)
-                                                .ConfigureAwait(false);
-                    }
-                }
-                else
-                {
-                    // Request with JSON data
+        //                response = await _httpClient.PostAsync(uri, form, cancellationToken)
+        //                                        .ConfigureAwait(false);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Request with JSON data
 
-                    var payload = JsonConvert.SerializeObject(parameters);
+        //            var payload = JsonConvert.SerializeObject(parameters);
 
-                    var httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+        //            var httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
 
-                    response = await _httpClient.PostAsync(uri, httpContent, cancellationToken)
-                                            .ConfigureAwait(false);
-                }
+        //            response = await _httpClient.PostAsync(uri, httpContent, cancellationToken)
+        //                                    .ConfigureAwait(false);
+        //        }
 
-                var responseString = await response.Content.ReadAsStringAsync()
-                                                    .ConfigureAwait(false);
+        //        var responseString = await response.Content.ReadAsStringAsync()
+        //                                            .ConfigureAwait(false);
 
-                responseObject = JsonConvert.DeserializeObject<ApiResponse<T>>(responseString);
+        //        responseObject = JsonConvert.DeserializeObject<ApiResponse<T>>(responseString);
 
-                //response.EnsureSuccessStatusCode();
-            }
-            catch (HttpRequestException e) when (e.Message.Contains("401"))
-            {
-                _invalidToken = true;
-                throw new ApiRequestException("Invalid token", 401, e);
-            }
-            catch (TaskCanceledException e)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    throw;
+        //        //response.EnsureSuccessStatusCode();
+        //    }
+        //    catch (HttpRequestException e) when (e.Message.Contains("401"))
+        //    {
+        //        _invalidToken = true;
+        //        throw new ApiRequestException("Invalid token", 401, e);
+        //    }
+        //    catch (TaskCanceledException e)
+        //    {
+        //        if (cancellationToken.IsCancellationRequested)
+        //            throw;
 
-                throw new ApiRequestException("Request timed out", 408, e);
-            }
-            catch (HttpRequestException e)
-                when (e.Message.Contains("400") || e.Message.Contains("403") || e.Message.Contains("409")) {}
+        //        throw new ApiRequestException("Request timed out", 408, e);
+        //    }
+        //    catch (HttpRequestException e)
+        //        when (e.Message.Contains("400") || e.Message.Contains("403") || e.Message.Contains("409")) {}
 
-            if (responseObject == null)
-                responseObject = new ApiResponse<T> {Ok = false, Message = "No response received"};
+        //    if (responseObject == null)
+        //        responseObject = new ApiResponse<T> {Ok = false, Message = "No response received"};
 
-            if (!responseObject.Ok)
-                throw ApiRequestException.FromApiResponse(responseObject);
+        //    if (!responseObject.Ok)
+        //        throw ApiRequestException.FromApiResponse(responseObject);
 
-            return responseObject.ResultObject;
-        }
+        //    return responseObject.ResultObject;
+        //}
 
         private static HttpContent ConvertParameterValue(object value)
         {

@@ -1,8 +1,8 @@
 using System;
+using lukascoding.TelegramBotApiClient.Types.InlineQueryResults;
 using Newtonsoft.Json;
-using Telegram.Bot.Types.InlineQueryResults;
 
-namespace Telegram.Bot.Converters
+namespace lukascoding.TelegramBotApiClient.Converters
 {
     internal class InlineQueryResultTypeConverter : JsonConverter
     {

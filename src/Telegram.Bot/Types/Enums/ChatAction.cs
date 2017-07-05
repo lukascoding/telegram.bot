@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace Telegram.Bot.Types.Enums
+namespace lukascoding.TelegramBotApiClient.Types.Enums
 {
     /// <summary>
     /// Type of action the Bot is performing

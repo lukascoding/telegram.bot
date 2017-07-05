@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types
+namespace lukascoding.TelegramBotApiClient.Types
 {
     /// <summary>
     /// This object represents a result of an <see cref="InlineQuery"/> that was chosen by the <see cref="User"/> and sent to their chat partner.

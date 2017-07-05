@@ -1,8 +1,7 @@
 using System.ComponentModel;
-
 using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.InlineQueryResults
+namespace lukascoding.TelegramBotApiClient.Types.InlineQueryResults
 {
     /// <summary>
     /// Represents a link to an animated GIF file.

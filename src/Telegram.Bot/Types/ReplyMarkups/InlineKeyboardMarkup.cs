@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Telegram.Bot.Types.ReplyMarkups
+namespace lukascoding.TelegramBotApiClient.Types.ReplyMarkups
 {
     /// <summary>
     /// This object represents an inline keyboard that appears right next to the <see cref="Message"/> it belongs to.
